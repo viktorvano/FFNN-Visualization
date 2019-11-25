@@ -90,7 +90,7 @@ public class Neuron {
 
             for (int index = 0; index < weights.size(); index++)
             {
-                strWeights += (formatDoubleToString(weights.get(index)) + "\n");
+                strWeights += (formatDoubleToString12(weights.get(index)) + "\n");
             }
             writeToFile("res\\weights.txt", strWeights);
         }

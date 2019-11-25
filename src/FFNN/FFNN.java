@@ -29,8 +29,8 @@ public class FFNN extends Application
     private Button[] btnInputs;
     private Button[] btnOutputs;
     private Label[] lblOutputs;
-    private int[] inputColor;
-    private int[] outputColor;
+    private double[] inputColor;
+    private double[] outputColor;
     private final int width = 1600;
     private final int height = 900;
     private Timeline timelineNeuralNetTrain;
@@ -56,20 +56,14 @@ public class FFNN extends Application
         stage.setResizable(false);
 
         btnInputs =  new Button[9];
-        inputColor = new int[9];
+        inputColor = new double[9];
         for(int i=0; i<btnInputs.length; i++)
         {
             btnInputs[i] = new Button();
             btnInputs[i].setPrefSize(50, 50);
-            inputColor[i] = 0;
-            if(inputColor[i]<0x10)
-            {
-                String colorString = "-fx-background-color: #000" + Integer.toHexString(inputColor[i]) +"00;";
-                btnInputs[i].setStyle(colorString);
-            }
-            else
-                btnInputs[i].setStyle("-fx-background-color: #00" + Integer.toHexString(inputColor[i]) +"00;");
-            btnInputs[i].setText(String.valueOf(inputColor[i]));
+            inputColor[i] = 0.0;
+            btnInputs[i].setStyle(colorStyle(inputColor[i]));
+            btnInputs[i].setText(formatDoubleToString4(inputColor[i]));
             if(i<3)
             {
                 btnInputs[i].setLayoutY(340);
@@ -86,18 +80,15 @@ public class FFNN extends Application
         }
 
         btnOutputs =  new Button[4];
-        outputColor = new int[4];
+        outputColor = new double[4];
         lblOutputs = new Label[4];
         for(int i=0; i<btnOutputs.length; i++)
         {
             btnOutputs[i] = new Button();
             btnOutputs[i].setPrefSize(60, 60);
-            btnOutputs[i].setStyle("-fx-background-color: #000000; ");
-            outputColor[i] = 0;
-            String colorString = "-fx-background-color: #000" + Integer.toHexString(outputColor[i]) +"00;";
-            btnOutputs[i].setStyle(colorString);
-
-            btnOutputs[i].setText(String.valueOf(outputColor[i]));
+            outputColor[i] = 0.0;
+            btnOutputs[i].setStyle(colorStyle(outputColor[i]));
+            btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
 
             btnOutputs[i].setLayoutX(1420);
             btnOutputs[i].setLayoutY(180+150*i);
@@ -186,7 +177,7 @@ public class FFNN extends Application
                 btnHidden.get(x-1).add(new Button("0"));
                 btnHidden.get(x-1).get(y).setLayoutX(350+(x-1)*x_range);
                 btnHidden.get(x-1).get(y).setLayoutY(100+y*y_range);
-                btnHidden.get(x-1).get(y).setPrefSize(55, 40);
+                btnHidden.get(x-1).get(y).setPrefSize(60, 40);
                 btnHidden.get(x-1).get(y).setStyle("-fx-background-color: #000000;");
                 pane.getChildren().add(btnHidden.get(x-1).get(y));
             }
@@ -259,15 +250,9 @@ public class FFNN extends Application
         for(int i = 0; i < inputNodes; i++)
         {
             input.add((double)(Math.round(Math.random())));
-            inputColor[i] = (int)(input.getLast().doubleValue()*255.0);
-            if(inputColor[i]<0x10)
-            {
-                String colorString = "-fx-background-color: #000" + Integer.toHexString(inputColor[i]) +"00;";
-                btnInputs[i].setStyle(colorString);
-            }
-            else
-                btnInputs[i].setStyle("-fx-background-color: #00" + Integer.toHexString(inputColor[i]) +"00;");
-            btnInputs[i].setText(String.valueOf(inputColor[i]));
+            inputColor[i] = input.getLast().doubleValue();
+            btnInputs[i].setStyle(colorStyle(inputColor[i]));
+            btnInputs[i].setText(formatDoubleToString4(inputColor[i]));
         }
         showVectorValues("Inputs:", input);
         myNet.feedForward(input);
@@ -277,17 +262,9 @@ public class FFNN extends Application
             btnHidden.add(new LinkedList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
-                int color = (int)(255.0*myNet.getNeuronOutput(x, y));
-                btnHidden.get(x-1).get(y).setText(String.valueOf(color));
-                if(color<0)
-                    color=0;
-                if(color<0x10)
-                {
-                    String colorString = "-fx-background-color: #000" + Integer.toHexString(color) +"00;";
-                    btnHidden.get(x-1).get(y).setStyle(colorString);
-                }
-                else
-                    btnHidden.get(x-1).get(y).setStyle("-fx-background-color: #00" + Integer.toHexString(color) +"00;");
+                double color = myNet.getNeuronOutput(x, y);
+                btnHidden.get(x-1).get(y).setText(formatDoubleToString4(color));
+                btnHidden.get(x-1).get(y).setStyle(colorStyle(color));
             }
         }
 
@@ -297,22 +274,11 @@ public class FFNN extends Application
 
         for(int i = 0; i < outputNodes; i++)
         {
-            outputColor[i] = (int)(result.get(i).doubleValue()*255.0);
-            if(outputColor[i]<0x10)
-            {
-                String colorString;
-                if(outputColor[i]>=0)
-                    colorString = "-fx-background-color: #000" + Integer.toHexString(outputColor[i]) +"00;";
-                else
-                    colorString = "-fx-background-color: #000000;";
+            outputColor[i] = result.get(i).doubleValue();
+            btnOutputs[i].setStyle(colorStyle(outputColor[i]));
+            btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
 
-                btnOutputs[i].setStyle(colorString);
-            }
-            else
-                btnOutputs[i].setStyle("-fx-background-color: #00" + Integer.toHexString(outputColor[i]) +"00;");
-            btnOutputs[i].setText(String.valueOf(outputColor[i]));
-
-            if(outputColor[i]>128)
+            if(outputColor[i]>0.5)
                 timelineNeuralNetRun.stop();
         }
     }
