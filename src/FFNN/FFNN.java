@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -55,6 +56,9 @@ public class FFNN extends Application
         stage.setMinHeight(stage.getHeight());
         stage.setResizable(false);
 
+        Image icon = new Image(getClass().getResourceAsStream("../images/neural-network-icon.jpg"));
+        stage.getIcons().add(icon);
+
         btnInputs =  new Button[9];
         inputColor = new double[9];
         for(int i=0; i<btnInputs.length; i++)
@@ -85,7 +89,7 @@ public class FFNN extends Application
         for(int i=0; i<btnOutputs.length; i++)
         {
             btnOutputs[i] = new Button();
-            btnOutputs[i].setPrefSize(60, 60);
+            btnOutputs[i].setPrefSize(70, 70);
             outputColor[i] = 0.0;
             btnOutputs[i].setStyle(colorStyle(outputColor[i]));
             btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
@@ -177,7 +181,7 @@ public class FFNN extends Application
                 btnHidden.get(x-1).add(new Button("0"));
                 btnHidden.get(x-1).get(y).setLayoutX(350+(x-1)*x_range);
                 btnHidden.get(x-1).get(y).setLayoutY(100+y*y_range);
-                btnHidden.get(x-1).get(y).setPrefSize(60, 40);
+                btnHidden.get(x-1).get(y).setPrefSize(70, 40);
                 btnHidden.get(x-1).get(y).setStyle("-fx-background-color: #000000;");
                 pane.getChildren().add(btnHidden.get(x-1).get(y));
             }
