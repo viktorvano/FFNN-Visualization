@@ -56,8 +56,24 @@ public class FFNN extends Application
         stage.setMinHeight(stage.getHeight());
         stage.setResizable(false);
 
-        Image icon = new Image(getClass().getResourceAsStream("../images/neural-network-icon.jpg"));
-        stage.getIcons().add(icon);
+        try
+        {
+            Image icon = new Image(getClass().getResourceAsStream("../images/neural-network-icon.jpg"));
+            stage.getIcons().add(icon);
+            System.out.println("Icon loaded from IDE...");
+        }catch(Exception e)
+        {
+            try
+            {
+                Image icon = new Image("images/neural-network-icon.jpg");
+                stage.getIcons().add(icon);
+                System.out.println("Icon loaded from exported JAR...");
+            }catch(Exception e1)
+            {
+                System.out.println("Icon failed to load...");
+            }
+
+        }
 
         btnInputs =  new Button[9];
         inputColor = new double[9];
