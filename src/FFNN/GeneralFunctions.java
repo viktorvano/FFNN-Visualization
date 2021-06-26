@@ -2,11 +2,11 @@ package FFNN;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class GeneralFunctions {
-    public static void showVectorValues(String label, LinkedList<Double> v)
+    public static void showVectorValues(String label, ArrayList<Double> v)
     {
         System.out.println(label + " ");
         for (int i = 0; i < v.size(); i++)

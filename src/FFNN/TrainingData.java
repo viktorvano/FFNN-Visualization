@@ -1,6 +1,6 @@
 package FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static FFNN.Variables.*;
 
 public class TrainingData {
@@ -10,7 +10,7 @@ public class TrainingData {
 
     }*/
 
-    public static int getNextInputs(LinkedList<Double> inputValues)
+    public static int getNextInputs(ArrayList<Double> inputValues)
     {
         inputValues.clear();
 
@@ -22,7 +22,7 @@ public class TrainingData {
 
         return inputValues.size();
     }
-    public static int getTargetOutputs(LinkedList<Double> targetOutValues)
+    public static int getTargetOutputs(ArrayList<Double> targetOutValues)
     {
         targetOutValues.clear();
 

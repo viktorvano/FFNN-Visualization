@@ -1,6 +1,6 @@
 package FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static FFNN.Variables.*;
 import static FFNN.FileManagement.*;
 import static FFNN.GeneralFunctions.*;
@@ -8,13 +8,13 @@ import static FFNN.GeneralFunctions.*;
 public class Neuron {
     public Neuron(int numOutputs, int myIndex)
     {
-        m_outputWeights = new LinkedList<Connection>();
+        m_outputWeights = new ArrayList<Connection>();
         m_outputWeights.clear();
 
         for (int c = 0; c < numOutputs; c++)
         {
             m_outputWeights.add(new Connection());
-            m_outputWeights.peekLast().weight = randomWeight();
+            m_outputWeights.get(m_outputWeights.size()-1).weight = randomWeight();
         }
 
         m_myIndex = myIndex;
@@ -102,7 +102,7 @@ public class Neuron {
         // in the neurons in the preceding layer
 
         //load weights from a file to Weights[]
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\weights.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\weights.txt"));
 
         if(fileContent.size()==0 || fileContent==null)
         {
@@ -160,7 +160,7 @@ public class Neuron {
     }
 
     private double m_outputValue;
-    private LinkedList<Connection> m_outputWeights;
+    private ArrayList<Connection> m_outputWeights;
     private int m_myIndex;
     private double m_gradient;
 }

@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9be0c4e3-f9a6-4cb3-a811-ee79ad7539b8" name="Default Changelist" comment="" />
+    <list default="true" id="9be0c4e3-f9a6-4cb3-a811-ee79ad7539b8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/FF ArrayList.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FF LinkedList.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/FFNN.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/FFNN.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/FileManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/FileManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/GeneralFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/GeneralFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Layer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Layer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Neuron.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/TrainingData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/TrainingData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Variables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Weights.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Weights.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,12 +26,11 @@
   <component name="ProjectId" id="1U4TPUMO8YOAeAa4Wnqk4EIMatr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/FFNN" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -42,6 +54,7 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <extension name="recording" autostart="false" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -64,6 +77,7 @@
       </list>
     </option>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -82,34 +96,11 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1575202634362">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824/-1360.0.1360.728@0.0.1536.824" timestamp="1575202634362" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1575202634362">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824/-1360.0.1360.728@0.0.1536.824" timestamp="1575202634362" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1575202634362">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824/-1360.0.1360.728@0.0.1536.824" timestamp="1575202634362" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1575202634362">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824/-1360.0.1360.728@0.0.1536.824" timestamp="1575202634362" />
-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1575202394131">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="465" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824/-1360.0.1360.728@0.0.1536.824" timestamp="1575202394131" />
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

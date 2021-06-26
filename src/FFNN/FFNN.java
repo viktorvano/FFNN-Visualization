@@ -1,11 +1,9 @@
 package FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,7 +37,9 @@ public class FFNN extends Application
     private NeuralNetwork myNet;
     private boolean training = true;
     private Button btnRun;
-    private LinkedList<LinkedList<Button>> btnHidden = new LinkedList<>();
+    private ArrayList<ArrayList<Button>> btnHidden = new ArrayList<>();
+    private long totalTime = 0;
+    private int cycles = 0;
 
     @Override
     public void start(Stage stage)
@@ -139,26 +139,14 @@ public class FFNN extends Application
         pane.getChildren().addAll(lblOutputs);
         pane.getChildren().add(btnRun);
 
-        timelineNeuralNetRun = new Timeline(new KeyFrame[]{new KeyFrame(Duration.millis(20), new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                runCycle();
-            }
-        })});
+        timelineNeuralNetRun = new Timeline(new KeyFrame(Duration.millis(20), event -> runCycle()));
 
-        timelineNeuralNetTrain = new Timeline(new KeyFrame[]{new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                trainNeuralNet();
-                training = false;
-                timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
-                timelineNeuralNetRun.play();
-            }
-        })});
+        timelineNeuralNetTrain = new Timeline(new KeyFrame(Duration.millis(250), event -> {
+            trainNeuralNet();
+            training = false;
+            timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
+            timelineNeuralNetRun.play();
+        }));
 
         timelineNeuralNetTrain.setCycleCount(1);
         timelineNeuralNetTrain.play();
@@ -180,7 +168,7 @@ public class FFNN extends Application
             return;
         }
 
-        if (topology.getLast() != 4)
+        if (topology.get(topology.size()-1) != 4)
         {
             System.out.println("Topology ERROR:\nNeural network must have 4 outputs.");
             return;
@@ -190,7 +178,7 @@ public class FFNN extends Application
         x_range = 900/(topology.size() - 3);
         for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
         {
-            btnHidden.add(new LinkedList<>());
+            btnHidden.add(new ArrayList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
                 y_range = 750/topology.get(x);
@@ -205,9 +193,9 @@ public class FFNN extends Application
 
         myNet = new NeuralNetwork(topology);
 
-        input = new LinkedList<>();
-        target = new LinkedList<>();
-        result = new LinkedList<>();
+        input = new ArrayList<>();
+        target = new ArrayList<>();
+        result = new ArrayList<>();
         input.clear();
         target.clear();
         result.clear();
@@ -230,7 +218,7 @@ public class FFNN extends Application
                 // Train the net what the outputs should have been:
                 trainData.getTargetOutputs(target);
                 showVectorValues("Targets: ", target);
-                assert(target.size() == topology.peekLast());
+                assert(target.size() == topology.get(topology.size()-1));
                 myNet.backProp(target);//This function alters neurons
 
                 // Collect the net's actual results:
@@ -270,16 +258,21 @@ public class FFNN extends Application
         for(int i = 0; i < inputNodes; i++)
         {
             input.add((double)(Math.round(Math.random())));
-            inputColor[i] = input.getLast().doubleValue();
+            inputColor[i] = input.get(input.size()-1).doubleValue();
             btnInputs[i].setStyle(colorStyle(inputColor[i]));
             btnInputs[i].setText(formatDoubleToString4(inputColor[i]));
         }
         showVectorValues("Inputs:", input);
+        long start, end;
+        cycles++;
+        start = System.nanoTime();
         myNet.feedForward(input);
+        end = System.nanoTime();
+        totalTime += (end - start);
 
         for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
         {
-            btnHidden.add(new LinkedList<>());
+            btnHidden.add(new ArrayList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
                 double color = myNet.getNeuronOutput(x, y);
@@ -299,7 +292,12 @@ public class FFNN extends Application
             btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
 
             if(outputColor[i]>0.5)
+            {
                 timelineNeuralNetRun.stop();
+                double averageTimeMillis = ((double) totalTime/1000.0) / (double) cycles;
+                System.out.println("Average Feed Forward time [us]: " + averageTimeMillis);
+                System.out.println("Total Cycles: " + cycles);
+            }
         }
     }
 }

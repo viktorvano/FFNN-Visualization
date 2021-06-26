@@ -1,0 +1,2 @@
+Average Feed Forward time [us]: 9.040764331210191
+Total Cycles: 2041

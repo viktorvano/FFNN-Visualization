@@ -1,6 +1,6 @@
 package FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Variables {
     /*
@@ -18,12 +18,12 @@ public class Variables {
     public static double definedRecentAverageSmoothingFactor = 0.0;
 
 
-    public static LinkedList<Integer> topology;
-    public static final LinkedList<LinkedList<Double>> learningInputs = new LinkedList<>();
-    public static final LinkedList<LinkedList<Double>> learningOutputs = new LinkedList<>();
-    public static LinkedList<Double> weights = new LinkedList<>();
+    public static ArrayList<Integer> topology;
+    public static final ArrayList<ArrayList<Double>> learningInputs = new ArrayList<>();
+    public static final ArrayList<ArrayList<Double>> learningOutputs = new ArrayList<>();
+    public static ArrayList<Double> weights = new ArrayList<>();
     public static int neuronIndex = 0;
     public static int trainingLine = 0;// Has to be initialized 0
-    public static LinkedList<Double> input, target, result;
+    public static ArrayList<Double> input, target, result;
     public static int trainingPass = 0;
 }
