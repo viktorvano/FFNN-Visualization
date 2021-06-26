@@ -10,7 +10,7 @@ public class TrainingData {
 
     }*/
 
-    public static int getNextInputs(ArrayList<Double> inputValues)
+    public static int getNextInputs(ArrayList<Float> inputValues)
     {
         inputValues.clear();
 
@@ -22,7 +22,8 @@ public class TrainingData {
 
         return inputValues.size();
     }
-    public static int getTargetOutputs(ArrayList<Double> targetOutValues)
+
+    public static int getTargetOutputs(ArrayList<Float> targetOutValues)
     {
         targetOutValues.clear();
 

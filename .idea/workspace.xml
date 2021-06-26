@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9be0c4e3-f9a6-4cb3-a811-ee79ad7539b8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/FF ArrayList.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FF LinkedList.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Connection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FFNN/FFNN.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/FFNN.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FFNN/FileManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/FileManagement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FFNN/GeneralFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/GeneralFunctions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FFNN/Layer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Layer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FFNN/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Neuron.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FFNN/TrainingData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/TrainingData.java" afterDir="false" />

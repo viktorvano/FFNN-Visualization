@@ -28,8 +28,8 @@ public class FFNN extends Application
     private Button[] btnInputs;
     private Button[] btnOutputs;
     private Label[] lblOutputs;
-    private double[] inputColor;
-    private double[] outputColor;
+    private float[] inputColor;
+    private float[] outputColor;
     private final int width = 1600;
     private final int height = 900;
     private Timeline timelineNeuralNetTrain;
@@ -76,14 +76,14 @@ public class FFNN extends Application
         }
 
         btnInputs =  new Button[9];
-        inputColor = new double[9];
+        inputColor = new float[9];
         for(int i=0; i<btnInputs.length; i++)
         {
             btnInputs[i] = new Button();
             btnInputs[i].setPrefSize(50, 50);
-            inputColor[i] = 0.0;
+            inputColor[i] = 0.0f;
             btnInputs[i].setStyle(colorStyle(inputColor[i]));
-            btnInputs[i].setText(formatDoubleToString4(inputColor[i]));
+            btnInputs[i].setText(formatFloatToString4(inputColor[i]));
             if(i<3)
             {
                 btnInputs[i].setLayoutY(340);
@@ -100,15 +100,15 @@ public class FFNN extends Application
         }
 
         btnOutputs =  new Button[4];
-        outputColor = new double[4];
+        outputColor = new float[4];
         lblOutputs = new Label[4];
         for(int i=0; i<btnOutputs.length; i++)
         {
             btnOutputs[i] = new Button();
             btnOutputs[i].setPrefSize(70, 70);
-            outputColor[i] = 0.0;
+            outputColor[i] = 0.0f;
             btnOutputs[i].setStyle(colorStyle(outputColor[i]));
-            btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
+            btnOutputs[i].setText(formatFloatToString4(outputColor[i]));
 
             btnOutputs[i].setLayoutX(1420);
             btnOutputs[i].setLayoutY(180+150*i);
@@ -229,7 +229,7 @@ public class FFNN extends Application
                 // Report how well the training is working, averaged over recent samples:
                 System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
 
-                if (myNet.getRecentAverageError() < 0.00003 && trainingPass>50000)
+                if (myNet.getRecentAverageError() < 0.00003f && trainingPass>50000)
                 {
                     System.out.println("Exit due to low error :D\n\n");
                     myNet.saveNeuronWeights();
@@ -257,10 +257,10 @@ public class FFNN extends Application
         input.clear();
         for(int i = 0; i < inputNodes; i++)
         {
-            input.add((double)(Math.round(Math.random())));
-            inputColor[i] = input.get(input.size()-1).doubleValue();
+            input.add((float)(Math.round(Math.random())));
+            inputColor[i] = input.get(input.size()-1);
             btnInputs[i].setStyle(colorStyle(inputColor[i]));
-            btnInputs[i].setText(formatDoubleToString4(inputColor[i]));
+            btnInputs[i].setText(formatFloatToString4(inputColor[i]));
         }
         showVectorValues("Inputs:", input);
         long start, end;
@@ -275,8 +275,8 @@ public class FFNN extends Application
             btnHidden.add(new ArrayList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
-                double color = myNet.getNeuronOutput(x, y);
-                btnHidden.get(x-1).get(y).setText(formatDoubleToString4(color));
+                float color = myNet.getNeuronOutput(x, y);
+                btnHidden.get(x-1).get(y).setText(formatFloatToString4(color));
                 btnHidden.get(x-1).get(y).setStyle(colorStyle(color));
             }
         }
@@ -287,9 +287,9 @@ public class FFNN extends Application
 
         for(int i = 0; i < outputNodes; i++)
         {
-            outputColor[i] = result.get(i).doubleValue();
+            outputColor[i] = result.get(i);
             btnOutputs[i].setStyle(colorStyle(outputColor[i]));
-            btnOutputs[i].setText(formatDoubleToString4(outputColor[i]));
+            btnOutputs[i].setText(formatFloatToString4(outputColor[i]));
 
             if(outputColor[i]>0.5)
             {
