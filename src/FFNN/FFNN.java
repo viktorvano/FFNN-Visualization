@@ -128,9 +128,11 @@ public class FFNN extends Application
         btnRun.setPrefSize(80, 40);
         btnRun.setLayoutX(50);
         btnRun.setLayoutY(50);
+        btnRun.setDisable(true);
         btnRun.setOnAction(event-> {
-            if(netLoading ==false)
+            if(!netLoading)
             {
+                btnRun.setDisable(true);
                 timelineNeuralNetRun.play();
             }
         });
@@ -228,6 +230,7 @@ public class FFNN extends Application
             if(outputColor[i]>0.5)
             {
                 timelineNeuralNetRun.stop();
+                btnRun.setDisable(false);
                 double averageTimeMillis = ((double) totalTime/1000.0) / (double) cycles;
                 System.out.println("Average Feed Forward time [us]: " + averageTimeMillis);
                 System.out.println("Total Cycles: " + cycles);
