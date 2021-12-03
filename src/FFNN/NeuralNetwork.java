@@ -1,6 +1,8 @@
 package FFNN;
 
 import java.util.ArrayList;
+
+import static FFNN.FileManagement.readOrCreateFile;
 import static FFNN.Variables.*;
 
 public class NeuralNetwork {
@@ -134,6 +136,24 @@ public class NeuralNetwork {
     public void loadNeuronWeights()
     {
         neuronIndex = 0;
+
+        //load weights from a file to Weights[]
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\weights.txt"));
+
+        if(fileContent.size()==0 || fileContent==null)
+        {
+            System.out.println("Cannot open weights.txt");
+            System.exit(-10);
+        }
+
+        for (int index = 0; index < weights.size(); index++)
+        {
+            if(fileContent.get(index).length()!=0)
+            {
+                weights.set(index, Float.parseFloat(fileContent.get(index)));
+            }
+        }
+
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {

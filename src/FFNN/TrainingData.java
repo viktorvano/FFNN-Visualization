@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import static FFNN.Variables.*;
 
 public class TrainingData {
-
-    /*public TrainingData()
-    {
-
-    }*/
-
     public static int getNextInputs(ArrayList<Float> inputValues)
     {
         inputValues.clear();

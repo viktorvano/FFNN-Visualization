@@ -32,14 +32,15 @@ public class FFNN extends Application
     private float[] outputColor;
     private final int width = 1600;
     private final int height = 900;
-    private Timeline timelineNeuralNetTrain;
+    private TrainingThread trainingThread;
     private Timeline timelineNeuralNetRun;
     private NeuralNetwork myNet;
-    private boolean training = true;
+    private boolean netLoading = true;
     private Button btnRun;
     private ArrayList<ArrayList<Button>> btnHidden = new ArrayList<>();
     private long totalTime = 0;
     private int cycles = 0;
+    private TrainingData trainData = new TrainingData();
 
     @Override
     public void start(Stage stage)
@@ -128,7 +129,7 @@ public class FFNN extends Application
         btnRun.setLayoutX(50);
         btnRun.setLayoutY(50);
         btnRun.setOnAction(event-> {
-            if(training==false)
+            if(netLoading ==false)
             {
                 timelineNeuralNetRun.play();
             }
@@ -141,20 +142,6 @@ public class FFNN extends Application
 
         timelineNeuralNetRun = new Timeline(new KeyFrame(Duration.millis(20), event -> runCycle()));
 
-        timelineNeuralNetTrain = new Timeline(new KeyFrame(Duration.millis(250), event -> {
-            trainNeuralNet();
-            training = false;
-            timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
-            timelineNeuralNetRun.play();
-        }));
-
-        timelineNeuralNetTrain.setCycleCount(1);
-        timelineNeuralNetTrain.play();
-    }
-
-    private void trainNeuralNet()
-    {
-        TrainingData trainData = new TrainingData();
         loadTopology();
         if (topology.size() < 3)
         {
@@ -190,61 +177,8 @@ public class FFNN extends Application
                 pane.getChildren().add(btnHidden.get(x-1).get(y));
             }
         }
-
-        myNet = new NeuralNetwork(topology);
-
-        input = new ArrayList<>();
-        target = new ArrayList<>();
-        result = new ArrayList<>();
-        input.clear();
-        target.clear();
-        result.clear();
-
-        if(weights.size() != get_number_of_weights_from_file())
-        {
-            load_training_data_from_file();
-
-            System.out.println("Training started\n");
-            while (true)
-            {
-                trainingPass++;
-                System.out.println("Pass: " + trainingPass);
-
-                //Get new input data and feed it forward:
-                trainData.getNextInputs(input);
-                showVectorValues("Inputs:", input);
-                myNet.feedForward(input);
-
-                // Train the net what the outputs should have been:
-                trainData.getTargetOutputs(target);
-                showVectorValues("Targets: ", target);
-                assert(target.size() == topology.get(topology.size()-1));
-                myNet.backProp(target);//This function alters neurons
-
-                // Collect the net's actual results:
-                myNet.getResults(result);
-                showVectorValues("Outputs: ", result);
-
-
-                // Report how well the training is working, averaged over recent samples:
-                System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
-
-                if (myNet.getRecentAverageError() < 0.00003f && trainingPass>50000)
-                {
-                    System.out.println("Exit due to low error :D\n\n");
-                    myNet.saveNeuronWeights();
-                    break;
-                }
-            }
-            System.out.println("Training done.\n");
-        }else
-        {
-            myNet.loadNeuronWeights();
-            System.out.println("Weights were loaded from file.\n");
-        }
-
-        System.out.println("Run mode begin\n");
-        trainingPass = 0;
+        trainingThread = new TrainingThread();
+        trainingThread.start();
     }
 
     private void runCycle()
@@ -299,5 +233,75 @@ public class FFNN extends Application
                 System.out.println("Total Cycles: " + cycles);
             }
         }
+    }
+
+    private class TrainingThread extends Thread
+    {
+        @Override
+        public void run() {
+            super.run();
+            trainNeuralNet();
+        }
+
+        private void trainNeuralNet()
+        {
+            myNet = new NeuralNetwork(topology);
+
+            input = new ArrayList<>();
+            target = new ArrayList<>();
+            result = new ArrayList<>();
+            input.clear();
+            target.clear();
+            result.clear();
+
+            if(weights.size() != get_number_of_weights_from_file())
+            {
+                load_training_data_from_file();
+
+                System.out.println("Training started\n");
+                while (true)
+                {
+                    trainingPass++;
+                    System.out.println("Pass: " + trainingPass);
+
+                    //Get new input data and feed it forward:
+                    trainData.getNextInputs(input);
+                    showVectorValues("Inputs:", input);
+                    myNet.feedForward(input);
+
+                    // Train the net what the outputs should have been:
+                    trainData.getTargetOutputs(target);
+                    showVectorValues("Targets: ", target);
+                    assert(target.size() == topology.get(topology.size()-1));
+                    myNet.backProp(target);//This function alters neurons
+
+                    // Collect the net's actual results:
+                    myNet.getResults(result);
+                    showVectorValues("Outputs: ", result);
+
+
+                    // Report how well the training is working, averaged over recent samples:
+                    System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
+
+                    if (myNet.getRecentAverageError() < 0.00003f && trainingPass>50000)
+                    {
+                        System.out.println("Exit due to low error :D\n\n");
+                        myNet.saveNeuronWeights();
+                        break;
+                    }
+                }
+                System.out.println("Training done.\n");
+            }else
+            {
+                myNet.loadNeuronWeights();
+                System.out.println("Weights were loaded from file.\n");
+            }
+            netLoading = false;
+            timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
+            timelineNeuralNetRun.play();
+            System.out.println("Run mode begin\n");
+            trainingPass = 0;
+        }
+
     }
 }

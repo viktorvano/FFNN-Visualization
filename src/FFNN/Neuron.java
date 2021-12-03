@@ -98,26 +98,6 @@ public class Neuron {
 
     public void loadInputWeights(Layer prevLayer)
     {
-        // The weights to updated are in the Connection container
-        // in the neurons in the preceding layer
-
-        //load weights from a file to Weights[]
-        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\weights.txt"));
-
-        if(fileContent.size()==0 || fileContent==null)
-        {
-            System.out.println("Cannot open weights.txt");
-            System.exit(-10);
-        }
-
-        for (int index = 0; index < weights.size(); index++)
-        {
-            if(fileContent.get(index).length()!=0)
-            {
-                weights.set(index, Float.parseFloat(fileContent.get(index)));
-            }
-        }
-
         for (int n = 0; n < prevLayer.size(); n++)
         {
             Neuron neuron = prevLayer.get(n);

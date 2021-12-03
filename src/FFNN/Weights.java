@@ -1,6 +1,7 @@
 package FFNN;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static FFNN.FileManagement.*;
 import static FFNN.Variables.*;
@@ -16,12 +17,7 @@ public class Weights {
             NumberOfWeights += (topology.get(index) + 1)*topology.get(index + 1);
         }
 
-        weights = new ArrayList<>();
-
-        for (index = 0; index < NumberOfWeights; index++)
-        {
-            weights.add(0.0f);
-        }
+        weights = new ArrayList<>(Arrays.asList(new Float[NumberOfWeights]));
     }
 
     public static void push_zeros_to_Learning_table()

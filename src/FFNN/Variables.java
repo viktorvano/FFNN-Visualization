@@ -3,13 +3,6 @@ package FFNN;
 import java.util.ArrayList;
 
 public class Variables {
-    /*
-        vector (c++)   <===========> linkedlist(java)
-        v.front()      <===========> l.peekFirst()
-        v.back()       <===========> l.peekLast()
-        v.push_back(x) <===========> l.add(x)
-        v.pop_back()   <===========> l.pollLast()
-    */
     public static int patternCount;
     public static int inputNodes;
     public static int outputNodes;

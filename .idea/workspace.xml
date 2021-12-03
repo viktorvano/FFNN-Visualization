@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9be0c4e3-f9a6-4cb3-a811-ee79ad7539b8" name="Default Changelist" comment="" />
+    <list default="true" id="9be0c4e3-f9a6-4cb3-a811-ee79ad7539b8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/FFNN.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/FFNN.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/NeuralNetwork.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Neuron.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/TrainingData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/TrainingData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Variables.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Variables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FFNN/Weights.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FFNN/Weights.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,6 +18,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1U4TPUMO8YOAeAa4Wnqk4EIMatr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -17,18 +28,18 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/res" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documents\GitHub\FFNN-Visualization\res" />
       <recent name="D:\Google Drive\IdeaProjects\FFNN Visualization\src\FFNN" />
       <recent name="D:\Google Drive\IdeaProjects\FFNN Visualization\src\images" />
       <recent name="D:\Google Drive\IdeaProjects\FFNN Visualization\res" />
       <recent name="D:\Google Drive\IdeaProjects\FFNN Visualization\src" />
-      <recent name="D:\Google Drive\IdeaProjects\FFNN Visualization" />
     </key>
   </component>
   <component name="RunManager">
@@ -88,6 +99,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
