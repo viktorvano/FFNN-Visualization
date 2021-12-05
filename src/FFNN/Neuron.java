@@ -1,14 +1,20 @@
 package FFNN;
 
 import java.util.ArrayList;
-import static FFNN.Variables.*;
 import static FFNN.FileManagement.*;
 import static FFNN.GeneralFunctions.*;
 
 public class Neuron {
-    public Neuron(int numOutputs, int myIndex)
+    NeuralNetObjects neuralNetObjects;
+    private float eta; // [0.0..1.0] overall network training rate
+    private float alpha; // [0.0..n] multiplier of last weight change (momentum)
+
+    public Neuron(NeuralNetObjects neuralNetObjects, int numOutputs, int myIndex)
     {
-        m_outputWeights = new ArrayList<Connection>();
+        this.neuralNetObjects = neuralNetObjects;
+        this.eta = this.neuralNetObjects.velocity;
+        this.alpha = this.neuralNetObjects.momentum;
+        m_outputWeights = new ArrayList<>();
         m_outputWeights.clear();
 
         for (int c = 0; c < numOutputs; c++)
@@ -79,20 +85,20 @@ public class Neuron {
         for (int n = 0; n < prevLayer.size(); n++)
         {
             Neuron neuron = prevLayer.get(n);
-            weights.set(neuronIndex, neuron.m_outputWeights.get(m_myIndex).weight);
-            neuronIndex++;
+            neuralNetObjects.weights.set(neuralNetObjects.neuronIndex, neuron.m_outputWeights.get(m_myIndex).weight);
+            neuralNetObjects.neuronIndex++;
         }
 
-        if (neuronIndex == weights.size())
+        if (neuralNetObjects.neuronIndex == neuralNetObjects.weights.size())
         {
             //save weights from Weights[] to a file
             String strWeights = new String();
 
-            for (int index = 0; index < weights.size(); index++)
+            for (int index = 0; index < neuralNetObjects.weights.size(); index++)
             {
-                strWeights += (formatFloatToString12(weights.get(index)) + "\n");
+                strWeights += (formatFloatToString12(neuralNetObjects.weights.get(index)) + "\n");
             }
-            writeToFile("res\\weights.txt", strWeights);
+            writeToFile(neuralNetObjects.weightsFilePath, strWeights);
         }
     }
 
@@ -101,13 +107,10 @@ public class Neuron {
         for (int n = 0; n < prevLayer.size(); n++)
         {
             Neuron neuron = prevLayer.get(n);
-            neuron.m_outputWeights.get(m_myIndex).weight = weights.get(neuronIndex);
-            neuronIndex++;
+            neuron.m_outputWeights.get(m_myIndex).weight = neuralNetObjects.weights.get(neuralNetObjects.neuronIndex);
+            this.neuralNetObjects.neuronIndex++;
         }
     }
-
-    private static float eta = velocity; // [0.0..1.0] overall network training rate
-    private static float alpha = momentum; // [0.0..n] multiplier of last weight change (momentum)
 
     private float sumDOW(Layer nextLayer)
     {

@@ -4,56 +4,55 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static FFNN.FileManagement.*;
-import static FFNN.Variables.*;
 
 public class Weights {
-    public static void push_zeros_to_Weights()
+    public static void push_zeros_to_Weights(NeuralNetObjects neuralNetObjects)
     {
         int index, NumberOfWeights = 0;
-        int topologySize = topology.size();
+        int topologySize = neuralNetObjects.topology.size();
 
         for (index = 0; index < topologySize - 1; index++)
         {
-            NumberOfWeights += (topology.get(index) + 1)*topology.get(index + 1);
+            NumberOfWeights += (neuralNetObjects.topology.get(index) + 1)*neuralNetObjects.topology.get(index + 1);
         }
 
-        weights = new ArrayList<>(Arrays.asList(new Float[NumberOfWeights]));
+        neuralNetObjects.weights = new ArrayList<>(Arrays.asList(new Float[NumberOfWeights]));
     }
 
-    public static void push_zeros_to_Learning_table()
+    public static void push_zeros_to_Learning_table(NeuralNetObjects neuralNetObjects)
     {
         ArrayList<Float> InputRow = new ArrayList<>();
         ArrayList<Float> OutputRow = new ArrayList<>();
         int row, column;
 
-        learningInputs.clear();
-        for (row = 0; row < inputNodes; row++)
+        neuralNetObjects.learningInputs.clear();
+        for (row = 0; row < neuralNetObjects.inputNodes; row++)
         {
             InputRow.add(0.0f);
         }
-        for (column = 0; column < patternCount; column++)
+        for (column = 0; column < neuralNetObjects.patternCount; column++)
         {
-            learningInputs.add(InputRow);
+            neuralNetObjects.learningInputs.add(InputRow);
         }
 
-        learningOutputs.clear();
-        for (row = 0; row < outputNodes; row++)
+        neuralNetObjects.learningOutputs.clear();
+        for (row = 0; row < neuralNetObjects.outputNodes; row++)
         {
             OutputRow.add(0.0f);
         }
-        for (column = 0; column < patternCount; column++)
+        for (column = 0; column < neuralNetObjects.patternCount; column++)
         {
-            learningOutputs.add(OutputRow);
+            neuralNetObjects.learningOutputs.add(OutputRow);
         }
     }
 
-    public static void get_training_data_count()
+    public static void get_training_data_count(NeuralNetObjects neuralNetObjects)
     {
-        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\training.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile(neuralNetObjects.trainingFilePath));
 
         if(fileContent.size()==0 || fileContent==null)
         {
-            System.out.println("Cannot open training.txt");
+            System.out.println("Cannot open " + neuralNetObjects.trainingFilePath);
             System.exit(-5);
         }
 
@@ -69,7 +68,7 @@ public class Weights {
         }
 
         if(count % 2 == 0)
-            patternCount = count / 2;
+            neuralNetObjects.patternCount = count / 2;
         else
         {
             System.out.println("Training data error.");
@@ -78,14 +77,13 @@ public class Weights {
 
     }
 
-    public static void loadTopology()
+    public static void loadTopology(NeuralNetObjects neuralNetObjects)
     {
-        topology = new ArrayList<>();
-        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\topology.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile(neuralNetObjects.topologyFilePath));
 
-        if(fileContent.size()==0 || fileContent==null)
+        if(fileContent.size() == 0 || fileContent == null)
         {
-            System.out.println("Cannot open topology.txt");
+            System.out.println("Cannot open " + neuralNetObjects.topologyFilePath);
             System.exit(-7);
         }
 
@@ -101,26 +99,26 @@ public class Weights {
                 }
             }
 
-            if(numberString!=null && numberString.length()!=0)
+            if(numberString != null && numberString.length() != 0)
             {
-                topology.add(Integer.parseInt(numberString));
-                inputNodes = topology.get(0);
-                outputNodes = topology.get(topology.size() - 1);
-                get_training_data_count();
-                push_zeros_to_Learning_table();
-                push_zeros_to_Weights();
+                neuralNetObjects.topology.add(Integer.parseInt(numberString));
+                neuralNetObjects.inputNodes = neuralNetObjects.topology.get(0);
+                neuralNetObjects.outputNodes = neuralNetObjects.topology.get(neuralNetObjects.topology.size() - 1);
+                get_training_data_count(neuralNetObjects);
+                push_zeros_to_Learning_table(neuralNetObjects);
+                push_zeros_to_Weights(neuralNetObjects);
             }
         }
     }
 
 
-    public static void load_training_data_from_file()
+    public static void load_training_data_from_file(NeuralNetObjects neuralNetObjects)
     {
-        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\training.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile(neuralNetObjects.trainingFilePath));
 
         if(fileContent.size()==0 || fileContent==null)
         {
-            System.out.println("Cannot open topology.txt");
+            System.out.println("Cannot open " + neuralNetObjects.trainingFilePath);
             System.exit(-8);
         }
 
@@ -162,21 +160,21 @@ public class Weights {
                     }
                 }
                 System.out.println("Training =>> inputs:" + inputLine + " outputs: " + outputLine);
-                learningInputs.set(trainingDataLine, inputLine);
-                learningOutputs.set(trainingDataLine, outputLine);
+                neuralNetObjects.learningInputs.set(trainingDataLine, inputLine);
+                neuralNetObjects.learningOutputs.set(trainingDataLine, outputLine);
                 trainingDataLine++;
             }
         }
 
-        System.out.println("learningInputs: " + learningInputs);
-        System.out.println("learningOutputs: " + learningOutputs);
+        System.out.println("learningInputs: " + neuralNetObjects.learningInputs);
+        System.out.println("learningOutputs: " + neuralNetObjects.learningOutputs);
     }
 
-    public static int get_number_of_weights_from_file()
+    public static int get_number_of_weights_from_file(NeuralNetObjects neuralNetObjects)
     {
         int number_of_weights = 0;
 
-        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\weights.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile(neuralNetObjects.weightsFilePath));
 
         for (int i = 0; i < fileContent.size(); i++)
         {

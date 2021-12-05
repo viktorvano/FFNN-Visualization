@@ -1,31 +1,28 @@
 package FFNN;
 
-import java.util.ArrayList;
-import static FFNN.Variables.*;
-
 public class TrainingData {
-    public static int getNextInputs(ArrayList<Float> inputValues)
+    public static int getNextInputs(NeuralNetObjects neuralNetObjects)
     {
-        inputValues.clear();
+        neuralNetObjects.input.clear();
 
-        if (trainingLine >= patternCount)
-            trainingLine = 0;
+        if (neuralNetObjects.trainingLine >= neuralNetObjects.patternCount)
+            neuralNetObjects.trainingLine = 0;
 
-        for (int i = 0; i<inputNodes; i++)
-            inputValues.add(learningInputs.get(trainingLine).get(i));
+        for (int i = 0; i<neuralNetObjects.inputNodes; i++)
+            neuralNetObjects.input.add(neuralNetObjects.learningInputs.get(neuralNetObjects.trainingLine).get(i));
 
-        return inputValues.size();
+        return neuralNetObjects.input.size();
     }
 
-    public static int getTargetOutputs(ArrayList<Float> targetOutValues)
+    public static int getTargetOutputs(NeuralNetObjects neuralNetObjects)
     {
-        targetOutValues.clear();
+        neuralNetObjects.target.clear();
 
-        for (int i = 0; i<outputNodes; i++)
-            targetOutValues.add(learningOutputs.get(trainingLine).get(i));
+        for (int i = 0; i<neuralNetObjects.outputNodes; i++)
+            neuralNetObjects.target.add(neuralNetObjects.learningOutputs.get(neuralNetObjects.trainingLine).get(i));
 
-        trainingLine++;
+        neuralNetObjects.trainingLine++;
 
-        return targetOutValues.size();
+        return neuralNetObjects.target.size();
     }
 }

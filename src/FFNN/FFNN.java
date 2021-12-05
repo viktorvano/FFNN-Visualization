@@ -12,9 +12,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
-import static FFNN.Variables.*;
-import static FFNN.Weights.*;
 import static FFNN.GeneralFunctions.*;
 
 public class FFNN extends Application
@@ -32,15 +29,15 @@ public class FFNN extends Application
     private float[] outputColor;
     private final int width = 1600;
     private final int height = 900;
-    private TrainingThread trainingThread;
     private Timeline timelineNeuralNetRun;
+    private Timeline timelineNeuralNetLoading;
     private NeuralNetwork myNet;
+    private NeuralNetObjects neuralNetObjects;
     private boolean netLoading = true;
     private Button btnRun;
     private ArrayList<ArrayList<Button>> btnHidden = new ArrayList<>();
     private long totalTime = 0;
     private int cycles = 0;
-    private TrainingData trainData = new TrainingData();
 
     @Override
     public void start(Stage stage)
@@ -74,6 +71,24 @@ public class FFNN extends Application
                 System.out.println("Icon failed to load...");
             }
 
+        }
+
+        String fileSeparator = System.getProperty("file.separator");
+        String topologyFilePath = "res" + fileSeparator + "topology.txt";
+        String trainingFilePath = "res" + fileSeparator + "training.txt";
+        String weightsFilePath = "res" + fileSeparator + "weights.txt";
+        neuralNetObjects = new NeuralNetObjects(topologyFilePath, trainingFilePath, weightsFilePath,0.1f, 0.5f, 0.0003f, 50000);
+        myNet = new NeuralNetwork(neuralNetObjects);
+        if (neuralNetObjects.topology.get(0) != 9)
+        {
+            System.out.println("Topology ERROR:\nNeural network must have 9 inputs.");
+            return;
+        }
+
+        if (neuralNetObjects.topology.get(neuralNetObjects.topology.size()-1) != 4)
+        {
+            System.out.println("Topology ERROR:\nNeural network must have 4 outputs.");
+            return;
         }
 
         btnInputs =  new Button[9];
@@ -143,34 +158,16 @@ public class FFNN extends Application
         pane.getChildren().add(btnRun);
 
         timelineNeuralNetRun = new Timeline(new KeyFrame(Duration.millis(20), event -> runCycle()));
-
-        loadTopology();
-        if (topology.size() < 3)
-        {
-            System.out.println("Topology ERROR:\nTopology is too short, may miss some layer.");
-            return;
-        }
-
-        if (topology.get(0) != 9)
-        {
-            System.out.println("Topology ERROR:\nNeural network must have 9 inputs.");
-            return;
-        }
-
-        if (topology.get(topology.size()-1) != 4)
-        {
-            System.out.println("Topology ERROR:\nNeural network must have 4 outputs.");
-            return;
-        }
+        timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
 
         int x_range, y_range;
-        x_range = 900/(topology.size() - 3);
-        for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
+        x_range = 900/(neuralNetObjects.topology.size() - 3);
+        for(int x=1; x< neuralNetObjects.topology.size()-1; x++)//X = 900 pix range
         {
             btnHidden.add(new ArrayList<>());
-            for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
+            for(int y=0; y<neuralNetObjects.topology.get(x); y++)//Y = 750 pix range
             {
-                y_range = 750/topology.get(x);
+                y_range = 750/neuralNetObjects.topology.get(x);
                 btnHidden.get(x-1).add(new Button("0"));
                 btnHidden.get(x-1).get(y).setLayoutX(350+(x-1)*x_range);
                 btnHidden.get(x-1).get(y).setLayoutY(100+y*y_range);
@@ -179,8 +176,17 @@ public class FFNN extends Application
                 pane.getChildren().add(btnHidden.get(x-1).get(y));
             }
         }
-        trainingThread = new TrainingThread();
-        trainingThread.start();
+
+        timelineNeuralNetLoading  = new Timeline(new KeyFrame(Duration.millis(250), event -> {
+            if(!myNet.isNetLoading())
+            {
+                netLoading = false;
+                timelineNeuralNetRun.play();
+                timelineNeuralNetLoading.stop();
+            }
+        }));
+        timelineNeuralNetLoading.setCycleCount(Timeline.INDEFINITE);
+        timelineNeuralNetLoading.play();
     }
 
     private void runCycle()
@@ -190,26 +196,26 @@ public class FFNN extends Application
 
         //Get new input data and feed it forward:
         //Make sure that your input data are the same size as InputNodes
-        input.clear();
-        for(int i = 0; i < inputNodes; i++)
+        neuralNetObjects.input.clear();
+        for(int i = 0; i < neuralNetObjects.inputNodes; i++)
         {
-            input.add((float)(Math.round(Math.random())));
-            inputColor[i] = input.get(input.size()-1);
+            neuralNetObjects.input.add((float)(Math.round(Math.random())));
+            inputColor[i] = neuralNetObjects.input.get(neuralNetObjects.input.size()-1);
             btnInputs[i].setStyle(colorStyle(inputColor[i]));
             btnInputs[i].setText(formatFloatToString4(inputColor[i]));
         }
-        showVectorValues("Inputs:", input);
+        showVectorValues("Inputs:", neuralNetObjects.input);
         long start, end;
         cycles++;
         start = System.nanoTime();
-        myNet.feedForward(input);
+        myNet.feedForward(neuralNetObjects.input);
         end = System.nanoTime();
         totalTime += (end - start);
 
-        for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
+        for(int x=1; x< neuralNetObjects.topology.size()-1; x++)//X = 900 pix range
         {
             btnHidden.add(new ArrayList<>());
-            for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
+            for(int y=0; y<neuralNetObjects.topology.get(x); y++)//Y = 750 pix range
             {
                 float color = myNet.getNeuronOutput(x, y);
                 btnHidden.get(x-1).get(y).setText(formatFloatToString4(color));
@@ -218,12 +224,12 @@ public class FFNN extends Application
         }
 
         // Collect the net's actual results:
-        myNet.getResults(result);
-        showVectorValues("Outputs: ", result);
+        myNet.getResults(neuralNetObjects.result);
+        showVectorValues("Outputs: ", neuralNetObjects.result);
 
-        for(int i = 0; i < outputNodes; i++)
+        for(int i = 0; i < neuralNetObjects.outputNodes; i++)
         {
-            outputColor[i] = result.get(i);
+            outputColor[i] = neuralNetObjects.result.get(i);
             btnOutputs[i].setStyle(colorStyle(outputColor[i]));
             btnOutputs[i].setText(formatFloatToString4(outputColor[i]));
 
@@ -236,75 +242,5 @@ public class FFNN extends Application
                 System.out.println("Total Cycles: " + cycles);
             }
         }
-    }
-
-    private class TrainingThread extends Thread
-    {
-        @Override
-        public void run() {
-            super.run();
-            trainNeuralNet();
-        }
-
-        private void trainNeuralNet()
-        {
-            myNet = new NeuralNetwork(topology);
-
-            input = new ArrayList<>();
-            target = new ArrayList<>();
-            result = new ArrayList<>();
-            input.clear();
-            target.clear();
-            result.clear();
-
-            if(weights.size() != get_number_of_weights_from_file())
-            {
-                load_training_data_from_file();
-
-                System.out.println("Training started\n");
-                while (true)
-                {
-                    trainingPass++;
-                    System.out.println("Pass: " + trainingPass);
-
-                    //Get new input data and feed it forward:
-                    trainData.getNextInputs(input);
-                    showVectorValues("Inputs:", input);
-                    myNet.feedForward(input);
-
-                    // Train the net what the outputs should have been:
-                    trainData.getTargetOutputs(target);
-                    showVectorValues("Targets: ", target);
-                    assert(target.size() == topology.get(topology.size()-1));
-                    myNet.backProp(target);//This function alters neurons
-
-                    // Collect the net's actual results:
-                    myNet.getResults(result);
-                    showVectorValues("Outputs: ", result);
-
-
-                    // Report how well the training is working, averaged over recent samples:
-                    System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
-
-                    if (myNet.getRecentAverageError() < 0.00003f && trainingPass>50000)
-                    {
-                        System.out.println("Exit due to low error :D\n\n");
-                        myNet.saveNeuronWeights();
-                        break;
-                    }
-                }
-                System.out.println("Training done.\n");
-            }else
-            {
-                myNet.loadNeuronWeights();
-                System.out.println("Weights were loaded from file.\n");
-            }
-            netLoading = false;
-            timelineNeuralNetRun.setCycleCount(Timeline.INDEFINITE);
-            timelineNeuralNetRun.play();
-            System.out.println("Run mode begin\n");
-            trainingPass = 0;
-        }
-
     }
 }
