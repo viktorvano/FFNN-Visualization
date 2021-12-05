@@ -82,13 +82,13 @@ public class FFNN extends Application
         if (neuralNetObjects.topology.get(0) != 9)
         {
             System.out.println("Topology ERROR:\nNeural network must have 9 inputs.");
-            return;
+            System.exit(-368);
         }
 
         if (neuralNetObjects.topology.get(neuralNetObjects.topology.size()-1) != 4)
         {
             System.out.println("Topology ERROR:\nNeural network must have 4 outputs.");
-            return;
+            System.exit(-689);
         }
 
         btnInputs =  new Button[9];
