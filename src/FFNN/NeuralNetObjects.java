@@ -12,7 +12,6 @@ public class NeuralNetObjects {
     public Integer outputNodes;
     public Float velocity; // overall net learning rate [0.0..1.0]
     public Float momentum; // momentum multiplier of last deltaWeight [0.0..n]
-    public Float definedRecentAverageSmoothingFactor;
 
     public String weightsFilePath;
     public String trainingFilePath;
@@ -37,7 +36,6 @@ public class NeuralNetObjects {
         this.outputNodes = 0;
         this.velocity = velocity; // overall net learning rate [0.0..1.0]
         this.momentum = momentum; // momentum multiplier of last deltaWeight [0.0..n]
-        this.definedRecentAverageSmoothingFactor = 0.0f;
 
         this.weightsFilePath = weightsFilePath;
         this.trainingFilePath = trainingFilePath;

@@ -18,7 +18,6 @@ public class NeuralNetwork {
 
     private float m_error;
     private float m_recentAverageError;
-    private float m_recentAverageSmoothingFactor;
 
     public NeuralNetwork(@NotNull NeuralNetObjects neuralNetObjects)
     {
@@ -26,7 +25,6 @@ public class NeuralNetwork {
         this.netLoading = true;
         this.m_error = 0;
         this.m_recentAverageError = 0;
-        this.m_recentAverageSmoothingFactor = neuralNetObjects.definedRecentAverageSmoothingFactor;
         int numLayers = neuralNetObjects.topology.size();
         System.out.println("Number of layers: " + numLayers);
         this.m_layers = new ArrayList<>();
@@ -90,9 +88,7 @@ public class NeuralNetwork {
 
         // Implement a recent average measurement;
 
-        m_recentAverageError =
-                (m_recentAverageError * m_recentAverageSmoothingFactor + m_error)
-                        / (m_recentAverageSmoothingFactor + 1.0f);
+        m_recentAverageError = m_error;
 
         // Calculate output layer gradients
         for (int n = 0; n < outputLayer.size() - 1; n++)
@@ -215,18 +211,23 @@ public class NeuralNetwork {
                 load_training_data_from_file(neuralNetObjects);
 
                 System.out.println("Training started\n");
+                float averageError = 1.0f;
+                float currentTrainingError;
+                boolean repeatTrainingCycle = false;
                 while (true)
                 {
                     netObjects.trainingPass++;
                     System.out.println("Pass: " + netObjects.trainingPass);
 
                     //Get new input data and feed it forward:
-                    netObjects.trainData.getNextInputs(netObjects);
+                    if(!repeatTrainingCycle)
+                        netObjects.trainData.getNextInputs(netObjects);
                     showVectorValues("Inputs:", netObjects.input);
                     myNet.feedForward(netObjects.input);
 
                     // Train the net what the outputs should have been:
-                    netObjects.trainData.getTargetOutputs(netObjects);
+                    if(!repeatTrainingCycle)
+                        netObjects.trainData.getTargetOutputs(netObjects);
                     showVectorValues("Targets: ", netObjects.target);
                     assert(netObjects.target.size() == netObjects.topology.get(netObjects.topology.size()-1));
                     myNet.backProp(netObjects.target);//This function alters neurons
@@ -239,7 +240,12 @@ public class NeuralNetwork {
                     // Report how well the training is working, averaged over recent samples:
                     System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
 
-                    if (myNet.getRecentAverageError() < netObjects.trainingExitError
+                    currentTrainingError = myNet.getRecentAverageError();
+                    averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+                    System.out.println("Net average error: " + averageError + "\n\n");
+                    repeatTrainingCycle = currentTrainingError > averageError;
+
+                    if (averageError < netObjects.trainingExitError
                             && netObjects.trainingPass > netObjects.minTrainingPasses)
                     {
                         System.out.println("Exit due to low error :D\n\n");
