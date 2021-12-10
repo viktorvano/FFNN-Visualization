@@ -170,7 +170,7 @@ public class Weights {
         System.out.println("learningOutputs: " + neuralNetObjects.learningOutputs);
     }
 
-    public static int get_number_of_weights_from_file(NeuralNetObjects neuralNetObjects)
+    public static int getNumberOfWeightsFromFile(NeuralNetObjects neuralNetObjects)
     {
         int number_of_weights = 0;
 

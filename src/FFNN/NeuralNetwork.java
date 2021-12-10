@@ -46,7 +46,7 @@ public class NeuralNetwork {
             m_layers.get(m_layers.size()-1).peekLast().setOutputValue(1.0f);
         }
         this.loadNeuronWeights();
-        if(this.neuralNetObjects.weights.size() != get_number_of_weights_from_file(neuralNetObjects))
+        if(getNumberOfWeightsFromFile(neuralNetObjects) == 0)
             trainNeuralNetwork();
         netLoading = false;
     }
