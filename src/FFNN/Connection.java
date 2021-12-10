@@ -1,20 +1,12 @@
 package FFNN;
 
 public class Connection {
-    /*
-        struct Connection
-        {
-            float weight;
-            float deltaWeight;
-        };
-     */
-
    public float weight;
    public float deltaWeight;
 
    public Connection()
    {
-      weight = 0.0f;
+      weight = (float)Math.random()-0.5f;//+-0.5f
       deltaWeight = 0.0f;
    }
 }

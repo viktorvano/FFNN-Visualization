@@ -20,7 +20,6 @@ public class Neuron {
         for (int c = 0; c < numOutputs; c++)
         {
             m_outputWeights.add(new Connection());
-            m_outputWeights.get(m_outputWeights.size()-1).weight = randomWeight();
         }
 
         m_myIndex = myIndex;
@@ -135,11 +134,6 @@ public class Neuron {
     {
         // tanh derivative
         return (float) (1.0f - (float)Math.pow(Math.tanh(x), 2.0));// approximation return 1.0 - x*x;
-    }
-
-    private float randomWeight()
-    {
-        return (float)Math.random() - 0.5f;
     }
 
     private float m_outputValue;

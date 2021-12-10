@@ -33,7 +33,6 @@ public class FFNN extends Application
     private Timeline timelineNeuralNetLoading;
     private NeuralNetwork myNet;
     private NeuralNetObjects neuralNetObjects;
-    private boolean netLoading = true;
     private Button btnRun;
     private ArrayList<ArrayList<Button>> btnHidden = new ArrayList<>();
     private long totalTime = 0;
@@ -77,7 +76,7 @@ public class FFNN extends Application
         String topologyFilePath = "res" + fileSeparator + "topology.txt";
         String trainingFilePath = "res" + fileSeparator + "training.txt";
         String weightsFilePath = "res" + fileSeparator + "weights.txt";
-        neuralNetObjects = new NeuralNetObjects(topologyFilePath, trainingFilePath, weightsFilePath,0.1f, 0.5f, 0.0003f, 50000);
+        neuralNetObjects = new NeuralNetObjects(topologyFilePath, trainingFilePath, weightsFilePath,0.1f, 0.5f, 0.0003f, 50000, 1000000);
         myNet = new NeuralNetwork(neuralNetObjects);
         if (neuralNetObjects.topology.get(0) != 9)
         {
@@ -145,7 +144,7 @@ public class FFNN extends Application
         btnRun.setLayoutY(50);
         btnRun.setDisable(true);
         btnRun.setOnAction(event-> {
-            if(!netLoading)
+            if(!myNet.isNetLoading() && !myNet.isNetTraining())
             {
                 btnRun.setDisable(true);
                 timelineNeuralNetRun.play();
@@ -178,9 +177,8 @@ public class FFNN extends Application
         }
 
         timelineNeuralNetLoading  = new Timeline(new KeyFrame(Duration.millis(250), event -> {
-            if(!myNet.isNetLoading())
+            if(!myNet.isNetLoading() && !myNet.isNetTraining())
             {
-                netLoading = false;
                 timelineNeuralNetRun.play();
                 timelineNeuralNetLoading.stop();
             }

@@ -15,6 +15,7 @@ public class NeuralNetwork {
     private ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
 
     private boolean netLoading;
+    private boolean netTraining;
 
     private float m_error;
     private float m_recentAverageError;
@@ -23,12 +24,12 @@ public class NeuralNetwork {
     {
         this.neuralNetObjects = neuralNetObjects;
         this.netLoading = true;
+        this.netTraining = false;
         this.m_error = 0;
         this.m_recentAverageError = 0;
         int numLayers = neuralNetObjects.topology.size();
         System.out.println("Number of layers: " + numLayers);
         this.m_layers = new ArrayList<>();
-        this.m_layers.clear();
         for (int layerNum = 0; layerNum < numLayers; layerNum++)
         {
             this.m_layers.add(new Layer());
@@ -44,12 +45,24 @@ public class NeuralNetwork {
             // Force the bias node's output value to 1.0. It's last neuron created above
             m_layers.get(m_layers.size()-1).peekLast().setOutputValue(1.0f);
         }
-        this.trainingThread = new TrainingThread(this);
-        this.trainingThread.start();
+        this.loadNeuronWeights();
+        if(this.neuralNetObjects.weights.size() != get_number_of_weights_from_file(neuralNetObjects))
+            trainNeuralNetwork();
+        netLoading = false;
     }
 
     public boolean isNetLoading() {
         return netLoading;
+    }
+    public boolean isNetTraining(){
+        return netTraining;
+    }
+
+    public void trainNeuralNetwork()
+    {
+        this.netTraining = true;
+        this.trainingThread = new TrainingThread(this);
+        this.trainingThread.start();
     }
 
     public void feedForward(ArrayList<Float> inputValues)
@@ -206,61 +219,61 @@ public class NeuralNetwork {
             netObjects.result.clear();
             neuralNetObjects.trainingPass = 0;
 
-            if(netObjects.weights.size() != get_number_of_weights_from_file(neuralNetObjects))
-            {
-                load_training_data_from_file(neuralNetObjects);
+            load_training_data_from_file(neuralNetObjects);
 
-                System.out.println("Training started\n");
-                float averageError = 1.0f;
-                float currentTrainingError;
-                boolean repeatTrainingCycle = false;
-                while (true)
+            System.out.println("Training started\n");
+            float averageError = 1.0f;
+            float currentTrainingError;
+            float quickSaveErrorValue = 0.5f;
+            boolean repeatTrainingCycle = false;
+            while (true)
+            {
+                netObjects.trainingPass++;
+                System.out.println("Pass: " + netObjects.trainingPass);
+
+                //Get new input data and feed it forward:
+                if(!repeatTrainingCycle)
+                    netObjects.trainData.getNextInputs(netObjects);
+                showVectorValues("Inputs:", netObjects.input);
+                myNet.feedForward(netObjects.input);
+
+                // Train the net what the outputs should have been:
+                if(!repeatTrainingCycle)
+                    netObjects.trainData.getTargetOutputs(netObjects);
+                showVectorValues("Targets: ", netObjects.target);
+                assert(netObjects.target.size() == netObjects.topology.get(netObjects.topology.size()-1));
+                myNet.backProp(netObjects.target);//This function alters neurons
+
+                // Collect the net's actual results:
+                myNet.getResults(netObjects.result);
+                showVectorValues("Outputs: ", netObjects.result);
+
+
+                // Report how well the training is working, averaged over recent samples:
+                System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
+
+                currentTrainingError = myNet.getRecentAverageError();
+                averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+                System.out.println("Net average error: " + averageError + "\n\n");
+                repeatTrainingCycle = currentTrainingError > averageError;
+
+                if(averageError < netObjects.trainingExitError
+                  && netObjects.trainingPass > netObjects.minTrainingPasses
+                  && netObjects.trainingPass < netObjects.maxTrainingPasses)
                 {
-                    netObjects.trainingPass++;
-                    System.out.println("Pass: " + netObjects.trainingPass);
-
-                    //Get new input data and feed it forward:
-                    if(!repeatTrainingCycle)
-                        netObjects.trainData.getNextInputs(netObjects);
-                    showVectorValues("Inputs:", netObjects.input);
-                    myNet.feedForward(netObjects.input);
-
-                    // Train the net what the outputs should have been:
-                    if(!repeatTrainingCycle)
-                        netObjects.trainData.getTargetOutputs(netObjects);
-                    showVectorValues("Targets: ", netObjects.target);
-                    assert(netObjects.target.size() == netObjects.topology.get(netObjects.topology.size()-1));
-                    myNet.backProp(netObjects.target);//This function alters neurons
-
-                    // Collect the net's actual results:
-                    myNet.getResults(netObjects.result);
-                    showVectorValues("Outputs: ", netObjects.result);
-
-
-                    // Report how well the training is working, averaged over recent samples:
-                    System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
-
-                    currentTrainingError = myNet.getRecentAverageError();
-                    averageError = 0.99f*averageError + 0.01f*currentTrainingError;
-                    System.out.println("Net average error: " + averageError + "\n\n");
-                    repeatTrainingCycle = currentTrainingError > averageError;
-
-                    if (averageError < netObjects.trainingExitError
-                            && netObjects.trainingPass > netObjects.minTrainingPasses)
-                    {
-                        System.out.println("Exit due to low error :D\n\n");
-                        myNet.saveNeuronWeights();
-                        break;
-                    }
+                    System.out.println("Exit due to low error :D\n\n");
+                    myNet.saveNeuronWeights();
+                    break;
+                }if(averageError < quickSaveErrorValue)
+                {
+                    quickSaveErrorValue = averageError/2f;
+                    myNet.saveNeuronWeights();
                 }
-                System.out.println("Training done.\n");
-            }else
-            {
-                myNet.loadNeuronWeights();
-                System.out.println("Weights were loaded from file.\n");
             }
-            netLoading = false;
-            System.out.println("Neural Network trained or loaded.");
+            System.out.println("Training done.\n");
+
+            this.myNet.netTraining = false;
+            System.out.println("Neural Network loaded.");
         }
 
     }

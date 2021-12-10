@@ -27,9 +27,10 @@ public class NeuralNetObjects {
 
     public Float trainingExitError;
     public Integer minTrainingPasses;
+    public Integer maxTrainingPasses;
     public TrainingData trainData;
 
-    public NeuralNetObjects(@NotNull String topologyFilePath, @NotNull String trainingFilePath, @NotNull String weightsFilePath, float velocity, float momentum, float trainingExitError, int minTrainingPasses)
+    public NeuralNetObjects(@NotNull String topologyFilePath, @NotNull String trainingFilePath, @NotNull String weightsFilePath, float velocity, float momentum, float trainingExitError, int minTrainingPasses, int maxTrainingPasses)
     {
         this.patternCount = 0;
         this.inputNodes = 0;
@@ -52,6 +53,7 @@ public class NeuralNetObjects {
         this.trainingPass = 0;
         this.trainingExitError = trainingExitError;
         this.minTrainingPasses = minTrainingPasses;
+        this.maxTrainingPasses = maxTrainingPasses;
         this.trainData = new TrainingData();
 
 
