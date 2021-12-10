@@ -2,6 +2,7 @@ package FFNN;
 
 import com.sun.istack.internal.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static FFNN.FileManagement.readOrCreateFile;
@@ -162,6 +163,7 @@ public class NeuralNetwork {
                 m_layers.get(layerNum).get(n).saveInputWeights(prevLayer);
             }
         }
+        Toolkit.getDefaultToolkit().beep();
     }
 
     public void loadNeuronWeights()
@@ -194,6 +196,7 @@ public class NeuralNetwork {
                 m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
             }
         }
+        Toolkit.getDefaultToolkit().beep();
     }
 
     private class TrainingThread extends Thread
