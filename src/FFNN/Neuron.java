@@ -106,7 +106,8 @@ public class Neuron {
         for (int n = 0; n < prevLayer.size(); n++)
         {
             Neuron neuron = prevLayer.get(n);
-            neuron.m_outputWeights.get(m_myIndex).weight = neuralNetObjects.weights.get(neuralNetObjects.neuronIndex);
+            if(neuralNetObjects.weights.get(neuralNetObjects.neuronIndex) != null)
+                neuron.m_outputWeights.get(m_myIndex).weight = neuralNetObjects.weights.get(neuralNetObjects.neuronIndex);
             this.neuralNetObjects.neuronIndex++;
         }
     }

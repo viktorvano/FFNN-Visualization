@@ -173,19 +173,19 @@ public class NeuralNetwork {
         //load weights from a file to Weights[]
         ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile(neuralNetObjects.weightsFilePath));
 
-        if(fileContent.size()==0 || fileContent==null)
+        if(fileContent.size()!=0)
         {
-            System.out.println("Cannot open " + neuralNetObjects.weightsFilePath);
-            System.exit(-10);
-        }
-
-        for (int index = 0; index < neuralNetObjects.weights.size(); index++)
-        {
-            if(fileContent.get(index).length()!=0)
+            for (int index = 0; index < neuralNetObjects.weights.size(); index++)
             {
-                neuralNetObjects.weights.set(index, Float.parseFloat(fileContent.get(index)));
+                if(fileContent.get(index).length()!=0)
+                {
+                    neuralNetObjects.weights.set(index, Float.parseFloat(fileContent.get(index)));
+                }
             }
         }
+        else
+            System.out.println("File " + neuralNetObjects.weightsFilePath + " is empty.");
+
 
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
