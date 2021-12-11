@@ -187,6 +187,14 @@ public class FFNN extends Application
         timelineNeuralNetLoading.play();
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        timelineNeuralNetRun.stop();
+        timelineNeuralNetLoading.stop();
+        myNet.stopTraining();
+    }
+
     private void runCycle()
     {
         //trainingPass++;

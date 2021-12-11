@@ -17,6 +17,7 @@ public class NeuralNetwork {
 
     private boolean netLoading;
     private boolean netTraining;
+    private boolean stopTraining;
 
     private float m_error;
     private float m_recentAverageError;
@@ -26,6 +27,7 @@ public class NeuralNetwork {
         this.neuralNetObjects = neuralNetObjects;
         this.netLoading = true;
         this.netTraining = false;
+        this.stopTraining = false;
         this.m_error = 0;
         this.m_recentAverageError = 0;
         int numLayers = neuralNetObjects.topology.size();
@@ -57,6 +59,10 @@ public class NeuralNetwork {
     }
     public boolean isNetTraining(){
         return netTraining;
+    }
+    public void stopTraining()
+    {
+        stopTraining = true;
     }
 
     public void trainNeuralNetwork()
@@ -272,9 +278,12 @@ public class NeuralNetwork {
                     quickSaveErrorValue = averageError/2f;
                     myNet.saveNeuronWeights();
                 }
+
+                if(stopTraining)
+                    break;
             }
             System.out.println("Training done.\n");
-
+            stopTraining = false;
             this.myNet.netTraining = false;
             System.out.println("Neural Network loaded.");
         }
