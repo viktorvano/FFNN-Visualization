@@ -271,8 +271,7 @@ public class NeuralNetwork {
                 repeatTrainingCycle = currentTrainingError > this.netObjects.averageError;
 
                 if(this.netObjects.averageError < netObjects.trainingExitError
-                  && netObjects.trainingPass > netObjects.minTrainingPasses
-                  && netObjects.trainingPass < netObjects.maxTrainingPasses)
+                  && netObjects.trainingPass > netObjects.minTrainingPasses)
                 {
                     System.out.println("Exit due to low error :D\n\n");
                     myNet.saveNeuronWeights();
@@ -281,6 +280,11 @@ public class NeuralNetwork {
                 {
                     quickSaveErrorValue = this.netObjects.averageError/2f;
                     myNet.saveNeuronWeights();
+                }if(netObjects.trainingPass > netObjects.maxTrainingPasses)
+                {
+                    System.out.println("Training passes were exceeded...\n\n");
+                    myNet.saveNeuronWeights();
+                    break;
                 }
 
                 if(stopTraining)
