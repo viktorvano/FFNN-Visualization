@@ -3,9 +3,11 @@ package FFNN;
 import com.sun.istack.internal.NotNull;
 
 import java.awt.*;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import static FFNN.FileManagement.readOrCreateFile;
+import static FFNN.FileManagement.writeToFile;
 import static FFNN.GeneralFunctions.showVectorValues;
 import static FFNN.Weights.*;
 
@@ -169,6 +171,8 @@ public class NeuralNetwork {
                 m_layers.get(layerNum).get(n).saveInputWeights(prevLayer);
             }
         }
+        ZonedDateTime now = ZonedDateTime.now();
+        writeToFile(neuralNetObjects.trainingStatusFilePath, now + "\nAverage Error: " + neuralNetObjects.averageError);
         Toolkit.getDefaultToolkit().beep();
     }
 
@@ -231,7 +235,7 @@ public class NeuralNetwork {
             load_training_data_from_file(neuralNetObjects);
 
             System.out.println("Training started\n");
-            float averageError = 1.0f;
+            this.netObjects.averageError = 1.0f;
             float currentTrainingError;
             float quickSaveErrorValue = 0.5f;
             boolean repeatTrainingCycle = false;
@@ -262,20 +266,20 @@ public class NeuralNetwork {
                 System.out.println("Net recent average error: " + myNet.getRecentAverageError() + "\n\n");
 
                 currentTrainingError = myNet.getRecentAverageError();
-                averageError = 0.99f*averageError + 0.01f*currentTrainingError;
-                System.out.println("Net average error: " + averageError + "\n\n");
-                repeatTrainingCycle = currentTrainingError > averageError;
+                this.netObjects.averageError = 0.99f*this.netObjects.averageError + 0.01f*currentTrainingError;
+                System.out.println("Net average error: " + this.netObjects.averageError + "\n\n");
+                repeatTrainingCycle = currentTrainingError > this.netObjects.averageError;
 
-                if(averageError < netObjects.trainingExitError
+                if(this.netObjects.averageError < netObjects.trainingExitError
                   && netObjects.trainingPass > netObjects.minTrainingPasses
                   && netObjects.trainingPass < netObjects.maxTrainingPasses)
                 {
                     System.out.println("Exit due to low error :D\n\n");
                     myNet.saveNeuronWeights();
                     break;
-                }if(averageError < quickSaveErrorValue)
+                }if(this.netObjects.averageError < quickSaveErrorValue)
                 {
-                    quickSaveErrorValue = averageError/2f;
+                    quickSaveErrorValue = this.netObjects.averageError/2f;
                     myNet.saveNeuronWeights();
                 }
 

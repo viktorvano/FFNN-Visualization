@@ -1,4 +1,4 @@
-package FFNN;
+package GUI;
 
 import java.util.ArrayList;
 import javafx.animation.KeyFrame;
@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import static FFNN.GeneralFunctions.*;
+import FFNN.NeuralNetwork;
+import FFNN.NeuralNetObjects;
 
 public class FFNN extends Application
 {
@@ -76,7 +78,9 @@ public class FFNN extends Application
         String topologyFilePath = "res" + fileSeparator + "topology.txt";
         String trainingFilePath = "res" + fileSeparator + "training.txt";
         String weightsFilePath = "res" + fileSeparator + "weights.txt";
-        neuralNetObjects = new NeuralNetObjects(topologyFilePath, trainingFilePath, weightsFilePath,0.1f, 0.5f, 0.0003f, 50000, 1000000);
+        String trainingStatusFilePath = "res" + fileSeparator + "trainingStatus.txt";
+        neuralNetObjects = new NeuralNetObjects(topologyFilePath, trainingFilePath, weightsFilePath, trainingStatusFilePath,
+                0.1f, 0.5f, 0.0003f, 50000, 1000000);
         myNet = new NeuralNetwork(neuralNetObjects);
         if (neuralNetObjects.topology.get(0) != 9)
         {

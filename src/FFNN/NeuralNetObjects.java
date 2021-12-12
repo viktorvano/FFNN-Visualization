@@ -16,6 +16,7 @@ public class NeuralNetObjects {
     public String weightsFilePath;
     public String trainingFilePath;
     public String topologyFilePath;
+    public String trainingStatusFilePath;
     public ArrayList<Integer> topology;
     public ArrayList<ArrayList<Float>> learningInputs;
     public ArrayList<ArrayList<Float>> learningOutputs;
@@ -26,21 +27,24 @@ public class NeuralNetObjects {
     public Integer trainingPass;
 
     public Float trainingExitError;
+    public Float averageError;
     public Integer minTrainingPasses;
     public Integer maxTrainingPasses;
     public TrainingData trainData;
 
-    public NeuralNetObjects(@NotNull String topologyFilePath, @NotNull String trainingFilePath, @NotNull String weightsFilePath, float velocity, float momentum, float trainingExitError, int minTrainingPasses, int maxTrainingPasses)
+    public NeuralNetObjects(@NotNull String topologyFilePath, @NotNull String trainingFilePath, @NotNull String weightsFilePath, @NotNull String trainingStatusFilePath, float velocity, float momentum, float trainingExitError, int minTrainingPasses, int maxTrainingPasses)
     {
         this.patternCount = 0;
         this.inputNodes = 0;
         this.outputNodes = 0;
         this.velocity = velocity; // overall net learning rate [0.0..1.0]
         this.momentum = momentum; // momentum multiplier of last deltaWeight [0.0..n]
+        this.averageError = 1.0f;
 
         this.weightsFilePath = weightsFilePath;
         this.trainingFilePath = trainingFilePath;
         this.topologyFilePath = topologyFilePath;
+        this.trainingStatusFilePath = trainingStatusFilePath;
         this.topology = new ArrayList<>();
         this.learningInputs = new ArrayList<>();
         this.learningOutputs = new ArrayList<>();
