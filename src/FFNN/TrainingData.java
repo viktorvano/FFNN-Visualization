@@ -5,8 +5,7 @@ public class TrainingData {
     {
         neuralNetObjects.input.clear();
 
-        if (neuralNetObjects.trainingLine >= neuralNetObjects.patternCount)
-            neuralNetObjects.trainingLine = 0;
+        neuralNetObjects.trainingLine = (int)Math.round(Math.random()*(neuralNetObjects.learningInputs.size()-1));
 
         for (int i = 0; i<neuralNetObjects.inputNodes; i++)
             neuralNetObjects.input.add(neuralNetObjects.learningInputs.get(neuralNetObjects.trainingLine).get(i));
@@ -20,8 +19,6 @@ public class TrainingData {
 
         for (int i = 0; i<neuralNetObjects.outputNodes; i++)
             neuralNetObjects.target.add(neuralNetObjects.learningOutputs.get(neuralNetObjects.trainingLine).get(i));
-
-        neuralNetObjects.trainingLine++;
 
         return neuralNetObjects.target.size();
     }
